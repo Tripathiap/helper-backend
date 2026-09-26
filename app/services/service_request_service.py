@@ -50,17 +50,15 @@ def create_service_request(
             service_type=service_request.problem_type,
         )
 
-        if provider:
-            send_notification(
-                recipient=provider.service_provider_phone_number,
-                channel=NotificationChannel.WHATSAPP,
-                message=message,
-            )
-        else:
-            logger.warning(
-                "No active provider found for service type '%s'",
-                service_request.problem_type,
-            )
+        send_notification(
+            recipient=(
+                provider.service_provider_phone_number
+                if provider
+                else "Adarsh - 9867554301"
+            ),
+            channel=NotificationChannel.WHATSAPP,
+            message=message,
+        )
 
     except Exception:
         logger.exception(
