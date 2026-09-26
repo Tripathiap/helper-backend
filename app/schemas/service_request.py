@@ -3,6 +3,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
+from app.core.enum import ServiceType
+
 
 class ServiceRequestCreate(BaseModel):
     requester_name: str = Field(
@@ -30,10 +32,7 @@ class ServiceRequestCreate(BaseModel):
         max_length=255,
     )
 
-    problem_type: str = Field(
-        min_length=2,
-        max_length=50,
-    )
+    problem_type: ServiceType
 
     problem_description: str | None = Field(
         default=None,

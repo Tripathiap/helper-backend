@@ -82,3 +82,54 @@ class ServiceRequest(Base):
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
     )
+
+
+class ServiceProvider(Base):
+    __tablename__ = "service_providers"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    public_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        unique=True,
+        nullable=False,
+        default=uuid.uuid4,
+        index=True,
+    )
+
+    service_provider_name: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+    )
+
+    service_provider_phone_number: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+
+    service_type: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+    )
+
+    is_active: Mapped[bool] = mapped_column(
+        nullable=False,
+        default=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        default=datetime.utcnow,
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
+    )

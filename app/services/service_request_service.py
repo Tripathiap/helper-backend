@@ -6,6 +6,7 @@ from app.db.models import ServiceRequest
 from app.schemas.service_request import ServiceRequestCreate
 from app.services.notification_service import (NotificationChannel,
                                                send_notification)
+from app.services.service_provider_service import find_active_provider
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,11 @@ def create_service_request(
     db.commit()
     db.refresh(service_request)
 
+    provider = find_active_provider(
+        db=db,
+        service_type=service_request.problem_type,
+    )
+
     message = (
         f"New service request #{service_request.public_id}. "
         f"Customer: {service_request.requester_name}. "
@@ -39,11 +45,22 @@ def create_service_request(
     )
 
     try:
-        send_notification(
-            recipient="Adarsh",
-            channel=NotificationChannel.WHATSAPP,
-            message=message,
+        provider = find_active_provider(
+            db=db,
+            service_type=service_request.problem_type,
         )
+
+        if provider:
+            send_notification(
+                recipient=provider.service_provider_phone_number,
+                channel=NotificationChannel.WHATSAPP,
+                message=message,
+            )
+        else:
+            logger.warning(
+                "No active provider found for service type '%s'",
+                service_request.problem_type,
+            )
 
     except Exception:
         logger.exception(
