@@ -2,8 +2,16 @@ from fastapi import Depends, FastAPI
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.db.database import get_db
 from app.api.service_requests import router as service_request_router
+from app.db.database import get_db
+import logging
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
+
 
 
 app = FastAPI(
@@ -13,22 +21,17 @@ app = FastAPI(
 )
 
 
-
-
-
 @app.get("/")
 def root():
-    return {
-        "message": "Welcome to Helper API"
-    }
+    return {"message": "Welcome to Helper API"}
+
 
 app.include_router(service_request_router)
 
+
 @app.get("/health")
 def health_check():
-    return {
-        "status": "healthy"
-    }
+    return {"status": "healthy"}
 
 
 @app.get("/health/database")

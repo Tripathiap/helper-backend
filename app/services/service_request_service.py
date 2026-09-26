@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 
 from app.db.models import ServiceRequest
 from app.schemas.service_request import ServiceRequestCreate
-from app.services.notification_service import notify_service_provider
+from app.services.notification_service import (NotificationChannel,
+                                               send_notification)
 
 logger = logging.getLogger(__name__)
 
@@ -38,10 +39,12 @@ def create_service_request(
     )
 
     try:
-        notify_service_provider(
-            provider_name="Adarsh",
+        send_notification(
+            recipient="Adarsh",
+            channel=NotificationChannel.WHATSAPP,
             message=message,
         )
+
     except Exception:
         logger.exception(
             "Failed to notify service provider for request %s",

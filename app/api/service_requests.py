@@ -2,14 +2,9 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-from app.schemas.service_request import (
-    ServiceRequestCreate,
-    ServiceRequestResponse,
-)
-from app.services.service_request_service import (
-    create_service_request,
-)
-
+from app.schemas.service_request import (ServiceRequestCreate,
+                                         ServiceRequestResponse)
+from app.services.service_request_service import create_service_request
 
 router = APIRouter(
     prefix="/api/v1/service-requests",

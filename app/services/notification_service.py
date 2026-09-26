@@ -1,15 +1,23 @@
 import logging
+from enum import Enum
 
 logger = logging.getLogger(__name__)
 
 
-def notify_service_provider(
-    provider_name: str,
+class NotificationChannel(str, Enum):
+    WHATSAPP = "whatsapp"
+    SMS = "sms"
+    EMAIL = "email"
+
+
+def send_notification(
+    recipient: str,
+    channel: NotificationChannel,
     message: str,
 ) -> None:
-
     logger.info(
-        "Notification to provider '%s': %s",
-        provider_name,
+        "Notification | channel=%s | recipient=%s | message=%s",
+        channel.value,
+        recipient,
         message,
     )
