@@ -1,7 +1,12 @@
+import logging
+
 from sqlalchemy.orm import Session
 
 from app.db.models import ServiceRequest
 from app.schemas.service_request import ServiceRequestCreate
+from app.services.notification_service import notify_service_provider
+
+logger = logging.getLogger(__name__)
 
 
 def create_service_request(
@@ -22,5 +27,25 @@ def create_service_request(
     db.add(service_request)
     db.commit()
     db.refresh(service_request)
+
+    message = (
+        f"New service request #{service_request.public_id}. "
+        f"Customer: {service_request.requester_name}. "
+        f"Problem: {service_request.problem_type}. "
+        f"Tower: {service_request.tower_number}, "
+        f"Flat: {service_request.flat_number}. "
+        f"Preferred time: {service_request.preferred_time_slot}."
+    )
+
+    try:
+        notify_service_provider(
+            provider_name="Adarsh",
+            message=message,
+        )
+    except Exception:
+        logger.exception(
+            "Failed to notify service provider for request %s",
+            service_request.public_id,
+        )
 
     return service_request
