@@ -7,6 +7,8 @@ from app.schemas.service_request import ServiceRequestCreate
 from app.services.notification_service import (NotificationChannel,
                                                send_notification)
 from app.services.service_provider_service import find_active_provider
+from app.core.config import settings
+
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +56,7 @@ def create_service_request(
             recipient=(
                 provider.service_provider_phone_number
                 if provider
-                else "Adarsh - 9867554301"
+                else settings.default_notification_recipient
             ),
             channel=NotificationChannel.WHATSAPP,
             message=message,
