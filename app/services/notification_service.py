@@ -1,6 +1,8 @@
 import logging
 from enum import Enum
 
+from app.notifications.email import EmailNotificationProvider
+
 logger = logging.getLogger(__name__)
 
 
@@ -10,14 +12,20 @@ class NotificationChannel(str, Enum):
     EMAIL = "email"
 
 
+email_provider = EmailNotificationProvider()
+
+
 def send_notification(
     recipient: str,
     channel: NotificationChannel,
     message: str,
 ) -> None:
-    logger.info(
-        "Notification | channel=%s | recipient=%s | message=%s",
-        channel.value,
-        recipient,
-        message,
-    )
+
+    if channel == NotificationChannel.EMAIL:
+        email_provider.send(
+            recipient=recipient,
+            message=message,
+        )
+        return
+
+    raise ValueError(f"Unsupported notification channel: {channel}")

@@ -133,3 +133,7 @@ class ServiceProvider(Base):
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
     )
+    service_provider_email: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+    )

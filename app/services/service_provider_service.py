@@ -14,6 +14,7 @@ def create_service_provider(
         service_provider_name=request.service_provider_name,
         service_provider_phone_number=request.service_provider_phone_number,
         service_type=request.service_type,
+        service_provider_email=request.service_provider_email,
     )
 
     db.add(service_provider)

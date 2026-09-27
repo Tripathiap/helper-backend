@@ -17,6 +17,11 @@ class ServiceProviderCreate(BaseModel):
         max_length=20,
     )
 
+    service_provider_email: str = Field(
+        min_length=5,
+        max_length=255,
+    )
+
     service_type: ServiceType
 
 
@@ -28,5 +33,6 @@ class ServiceProviderResponse(BaseModel):
     is_active: bool
     created_at: datetime
     updated_at: datetime
+    service_provider_email: str
 
     model_config = {"from_attributes": True}

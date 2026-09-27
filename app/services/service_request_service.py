@@ -2,13 +2,12 @@ import logging
 
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.db.models import ServiceRequest
 from app.schemas.service_request import ServiceRequestCreate
 from app.services.notification_service import (NotificationChannel,
                                                send_notification)
 from app.services.service_provider_service import find_active_provider
-from app.core.config import settings
-
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +31,6 @@ def create_service_request(
     db.commit()
     db.refresh(service_request)
 
-    provider = find_active_provider(
-        db=db,
-        service_type=service_request.problem_type,
-    )
-
     message = (
         f"New service request #{service_request.public_id}. "
         f"Customer: {service_request.requester_name}. "
@@ -54,11 +48,11 @@ def create_service_request(
 
         send_notification(
             recipient=(
-                provider.service_provider_phone_number
+                provider.service_provider_email
                 if provider
-                else settings.default_notification_recipient
+                else settings.default_notification_recipient_email
             ),
-            channel=NotificationChannel.WHATSAPP,
+            channel=NotificationChannel.EMAIL,
             message=message,
         )
 
