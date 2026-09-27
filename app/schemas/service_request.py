@@ -8,7 +8,7 @@ from app.core.enum import ServiceType
 
 class ServiceRequestCreate(BaseModel):
     requester_name: str = Field(
-        min_length=5,
+        min_length=1,
         max_length=100,
     )
 
