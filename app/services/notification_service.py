@@ -18,12 +18,14 @@ email_provider = EmailNotificationProvider()
 def send_notification(
     recipient: str,
     channel: NotificationChannel,
+    subject: str,
     message: str,
 ) -> None:
 
     if channel == NotificationChannel.EMAIL:
         email_provider.send(
             recipient=recipient,
+            subject=subject,
             message=message,
         )
         return

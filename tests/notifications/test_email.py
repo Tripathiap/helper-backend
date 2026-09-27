@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 from app.core.config import settings
+from app.notifications.base import NotificationProvider
 from app.notifications.email import EmailNotificationProvider
 
 
@@ -8,6 +9,7 @@ def test_send_email():
     provider = EmailNotificationProvider()
 
     recipient = "test@example.com"
+    subject = "New Service Request"
     message = "Test service request"
 
     with patch("app.notifications.email.smtplib.SMTP") as mock_smtp:
@@ -16,6 +18,7 @@ def test_send_email():
 
         provider.send(
             recipient=recipient,
+            subject=subject,
             message=message,
         )
 
@@ -37,5 +40,11 @@ def test_send_email():
 
         assert sent_email["From"] == settings.smtp_from_email
         assert sent_email["To"] == recipient
-        assert sent_email["Subject"] == "New Helper Service Request"
+        assert sent_email["Subject"] == subject
         assert sent_email.get_content().strip() == message
+
+
+def test_email_provider_implements_notification_provider():
+    provider = EmailNotificationProvider()
+
+    assert isinstance(provider, NotificationProvider)

@@ -7,6 +7,7 @@ class NotificationProvider(ABC):
     def send(
         self,
         recipient: str,
+        subject: str,
         message: str,
     ) -> None:
         pass

@@ -10,10 +10,12 @@ def test_send_notification_email():
         send_notification(
             recipient="test@example.com",
             channel=NotificationChannel.EMAIL,
+            subject="Test Subject",
             message="Test notification",
         )
 
         mock_send.assert_called_once_with(
             recipient="test@example.com",
+            subject="Test Subject",
             message="Test notification",
         )

@@ -31,12 +31,15 @@ def create_service_request(
     db.commit()
     db.refresh(service_request)
 
+    subject = f"New Service Request"
+
     message = (
-        f"New service request #{service_request.public_id}. "
+        f"New service request #{service_request.public_id}."
         f"Customer: {service_request.requester_name}. "
         f"Problem: {service_request.problem_type}. "
         f"Tower: {service_request.tower_number}, "
         f"Flat: {service_request.flat_number}. "
+        f"Complete Address: {service_request.requester_address}"
         f"Preferred time: {service_request.preferred_time_slot}."
     )
 
@@ -53,6 +56,7 @@ def create_service_request(
                 else settings.default_notification_recipient_email
             ),
             channel=NotificationChannel.EMAIL,
+            subject=subject,
             message=message,
         )
 

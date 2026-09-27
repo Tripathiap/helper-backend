@@ -13,13 +13,14 @@ class EmailNotificationProvider(NotificationProvider):
     def send(
         self,
         recipient: str,
+        subject: str,
         message: str,
     ) -> None:
         email = EmailMessage()
 
         email["From"] = settings.smtp_from_email
         email["To"] = recipient
-        email["Subject"] = "New Helper Service Request"
+        email["Subject"] = subject
         email.set_content(message)
 
         with smtplib.SMTP(
@@ -27,10 +28,12 @@ class EmailNotificationProvider(NotificationProvider):
             settings.smtp_port,
         ) as smtp:
             smtp.starttls()
+
             smtp.login(
                 settings.smtp_username,
                 settings.smtp_password,
             )
+
             smtp.send_message(email)
 
         logger.info(
